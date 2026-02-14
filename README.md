@@ -28,14 +28,6 @@ This project follows a distributed microservices architecture:
 - MySQL (Production profile)
 - Maven
 
----
-SpringBoot_Microservices/
-│
-├── config-server/
-├── eureka-server/
-├── item-service/
-├── order-service/
-
 
 ## ⚙️ Microservices Details
 
@@ -84,6 +76,7 @@ spring:
 
 
 ▶️ How To Run The Project
+
 1️⃣ Start Config Server
 cd config-server
 mvn spring-boot:run
@@ -101,6 +94,7 @@ cd order-service
 mvn spring-boot:run
 
 🧪 Testing
+
 🔹 Eureka Dashboard
 http://localhost:8761
 
