@@ -67,12 +67,18 @@ Used for production with MySQL configuration.
 ```yaml
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/order_db
-    username: root
-    password: root
+    url: jdbc:mysql://prod-db:3306/itemsdb
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: prod_user
+    password: prod_pass
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
+    show-sql: false
+
+logging:
+  level:
+    root: INFO
  ```
 
 
