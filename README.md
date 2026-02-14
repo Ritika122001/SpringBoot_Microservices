@@ -64,15 +64,16 @@ Used for production with MySQL configuration.
 ---
 
 ## 🗄️ Database Configuration (Production Example)
-
+```yaml
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/orders_db
+    url: jdbc:mysql://localhost:3306/order_db
     username: root
     password: root
   jpa:
     hibernate:
       ddl-auto: update
+ ```
 
 
 ▶️ How To Run The Project
