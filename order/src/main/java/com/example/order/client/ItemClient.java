@@ -6,11 +6,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import com.example.order.dto.ItemDTO;
+import com.example.order.fallback.ItemFallback;
 
 @Component
-@FeignClient(name = "ITEM-SERVICE")
+@FeignClient(name = "item-service" , fallback = ItemFallback.class)
 public interface ItemClient {
 
-    @GetMapping("/api/Items/{id}")
+    @GetMapping("/api/items/{id}")
     ItemDTO getItemById(@PathVariable("id") Long id);
 }

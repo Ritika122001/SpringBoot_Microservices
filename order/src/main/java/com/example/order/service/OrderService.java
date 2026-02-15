@@ -8,6 +8,8 @@ import com.example.order.dto.OrderDTO;
 import com.example.order.entities.Order;
 import com.example.order.repository.OrderRepository;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -49,7 +51,8 @@ public class OrderService {
         orderRepository.deleteById(id);
     }
 
-    private OrderDTO convertToDTO(Order order) {
+
+    public OrderDTO convertToDTO(Order order) {
         OrderDTO dto = new OrderDTO();
         dto.setId(order.getId());
         dto.setCustomerName(order.getCustomerName());
@@ -57,7 +60,7 @@ public class OrderService {
         List<ItemDTO>list = new ArrayList<>();
         for(Long itemId : order.getItemIds())
         {
-            ItemDTO item = itemClient.getItemById(itemId);
+            ItemDTO item = getItemWithCircuitBreaker(itemId);
             list.add(item);
         }
         dto.setItems(list);
@@ -65,4 +68,18 @@ public class OrderService {
         dto.setUpdatedDate(order.getUpdatedDate());
         return dto;
     }
+
+    @CircuitBreaker(name = "itemService", fallbackMethod = "fallbackGetItem")
+    public ItemDTO getItemWithCircuitBreaker(Long itemId) {
+        return itemClient.getItemById(itemId);
+    }
+
+    public ItemDTO fallbackGetItem(Long itemId, Throwable t) {
+        ItemDTO fallback = new ItemDTO();
+        fallback.setId(itemId);
+        fallback.setName("Item Service unavailable");
+        fallback.setQuantity(0);
+        return fallback;
+    }
+ 
 }

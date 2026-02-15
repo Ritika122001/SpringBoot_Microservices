@@ -13,9 +13,17 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.item.dto.ItemDTO;
 import com.example.item.service.ItemService;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
+
+@RefreshScope
 @RestController
-@RequestMapping("/api/Items")
+@RequestMapping("/api/items")
 public class ItemController {
+
+
+    @Value("${item.service.fail}")
+    private boolean failService;
 
     private final ItemService ItemService;
     
@@ -33,9 +41,15 @@ public class ItemController {
         return ItemService.getAllItems();
     }
 
-    // ✅ New endpoint to fetch item by ID
+    
+    
     @GetMapping("/{id}")
     public ItemDTO getItemById(@PathVariable Long id) {
+
+        if (failService) {
+            throw new RuntimeException("Simulated failure");
+        }
+
         return ItemService.getItemById(id);
     }
 
